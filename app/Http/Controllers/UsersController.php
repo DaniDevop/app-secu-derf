@@ -30,6 +30,12 @@ class UsersController extends Controller
       return view('index');
       }
 
+
+      public function dashboard(){
+
+      return view('users.index');
+      }
+
     public function doLogin(LoginUsersRequest $request){
 
         
@@ -43,7 +49,7 @@ class UsersController extends Controller
  
             flash()->success('Bienvenu');
 
-        return back();
+        return redirect()->route('users.dashboard');
         }
         flash()->warning('Information incorrecte.');
 
