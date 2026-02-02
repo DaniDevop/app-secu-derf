@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,3 +16,15 @@ Route::get('/users/admin/ecole',[UsersController::class,'ecoleView'])->name('use
 Route::post('/users/addEcole',[UsersController::class,'addEcole'])->name('users.addEcole');
 Route::get('/users/admin/ecole/modif/{id}',[UsersController::class,'editEcole'])->name('users.ecole.modif');  
 Route::post('/users/EditEcole',[UsersController::class,'editEcolePost'])->name('editEcole.Poste');
+
+
+
+// Services
+
+
+
+
+Route::get('/users/admin/services',[ServiceController::class,'ServicesView'])->name('users.ServicesView');  
+Route::post('/users/admin/addservices',[ServiceController::class,'addservice'])->name('addservice.users');  
+Route::get('/users/admin/services/modif/{id}',[ServiceController::class,'editServices'])->name('users.services.editServices');  
+Route::post('/users/admin/Modificationservices',[ServiceController::class,'editServicesPost'])->name('editServicesPost.users');  

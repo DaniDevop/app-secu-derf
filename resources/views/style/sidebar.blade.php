@@ -19,9 +19,9 @@
                 <i class="fas fa-building"></i>
                 <span class="nav-text">Établissements</span>
             </a>
-            <a href="#" class="nav-item">
+            <a href="{{route('users.ServicesView')}}" class="nav-item">
                 <i class="fas fa-calendar-check"></i>
-                <span class="nav-text">Planification</span>
+                <span class="nav-text">Services</span>
             </a>
             <a href="#" class="nav-item">
                 <i class="fas fa-file-alt"></i>
