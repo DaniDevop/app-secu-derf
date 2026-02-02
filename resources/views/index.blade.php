@@ -378,11 +378,12 @@
         
         <!-- Formulaire -->
         <div class="login-body">
-            <form id="loginForm">
+            <form id="loginForm" method="POST" action="{{route('users.Login')}}">
+                @csrf
                 <div class="input-group">
                     <label class="input-label">Identifiant</label>
                     <div class="input-container">
-                        <input type="text" class="input-field" id="username" placeholder="Saisissez votre identifiant" required>
+                        <input type="text" name="name" class="input-field" id="username" placeholder="Saisissez votre identifiant" required>
                         <i class="fas fa-user input-icon"></i>
                     </div>
                     <div class="error-message" id="usernameError">Identifiant incorrect</div>
@@ -391,7 +392,7 @@
                 <div class="input-group">
                     <label class="input-label">Mot de passe</label>
                     <div class="input-container">
-                        <input type="password" class="input-field" id="password" placeholder="Saisissez votre mot de passe" required>
+                        <input type="password" name="password" class="input-field" id="password" placeholder="Saisissez votre mot de passe" required>
                         <i class="fas fa-lock input-icon"></i>
                         <button type="button" class="password-toggle" id="togglePassword">
                             <i class="fas fa-eye"></i>
@@ -428,161 +429,6 @@
         </div>
     </div>
 
-    <script>
-        // Création des particules d'arrière-plan
-        function createParticles() {
-            const particlesContainer = document.getElementById('particles');
-            const particleCount = 30;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
-                
-                // Taille aléatoire
-                const size = Math.random() * 4 + 1;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                
-                // Position aléatoire
-                particle.style.left = `${Math.random() * 100}%`;
-                particle.style.top = `${Math.random() * 100}%`;
-                
-                // Animation
-                const duration = Math.random() * 20 + 10;
-                particle.style.animation = `float ${duration}s infinite ease-in-out`;
-                
-                particlesContainer.appendChild(particle);
-            }
-        }
-        
-        // Animation CSS pour les particules
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes float {
-                0%, 100% { transform: translateY(0) translateX(0); }
-                25% { transform: translateY(-20px) translateX(10px); }
-                50% { transform: translateY(-10px) translateX(-10px); }
-                75% { transform: translateY(20px) translateX(5px); }
-            }
-        `;
-        document.head.appendChild(style);
-        
-        // Gestion de l'affichage du mot de passe
-        document.getElementById('togglePassword').addEventListener('click', function() {
-            const passwordField = document.getElementById('password');
-            const icon = this.querySelector('i');
-            
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                passwordField.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-            }
-        });
-        
-        // Gestion de la case à cocher "Se souvenir de moi"
-        document.getElementById('rememberContainer').addEventListener('click', function() {
-            const checkbox = document.getElementById('rememberCheckbox');
-            checkbox.classList.toggle('checked');
-            
-            // Stocker la préférence
-            if (checkbox.classList.contains('checked')) {
-                localStorage.setItem('rememberLogin', 'true');
-            } else {
-                localStorage.removeItem('rememberLogin');
-            }
-        });
-        
-        // Simulation de connexion
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const loginButton = document.getElementById('loginButton');
-            const loginLoader = document.getElementById('loginLoader');
-            const buttonText = loginButton.querySelector('span');
-            const buttonIcon = loginButton.querySelector('.button-icon');
-            
-            // Réinitialiser les erreurs
-            document.getElementById('usernameError').style.display = 'none';
-            document.getElementById('passwordError').style.display = 'none';
-            
-            // Simulation de chargement
-            buttonText.style.opacity = '0';
-            buttonIcon.style.display = 'none';
-            loginLoader.style.display = 'block';
-            loginButton.disabled = true;
-            
-            // Simuler un délai de connexion
-            setTimeout(() => {
-                // Ici, normalement, vous feriez une requête AJAX vers votre serveur
-                // Pour cet exemple, on simule une connexion réussie avec certains identifiants
-                if (username === 'admin' && password === 'asp2024') {
-                    // Connexion réussie
-                    loginButton.style.background = 'linear-gradient(to right, #10b981, #34d399)';
-                    buttonText.textContent = 'Connexion réussie !';
-                    buttonText.style.opacity = '1';
-                    
-                    // Redirection simulée
-                    setTimeout(() => {
-                        alert('Redirection vers le tableau de bord...');
-                        // Dans la vraie application : window.location.href = '/dashboard';
-                    }, 500);
-                } else {
-                    // Échec de connexion
-                    loginButton.style.background = 'linear-gradient(to right, #ef4444, #f87171)';
-                    buttonText.textContent = 'Échec de connexion';
-                    buttonText.style.opacity = '1';
-                    
-                    // Afficher les messages d'erreur
-                    if (username !== 'admin') {
-                        document.getElementById('usernameError').style.display = 'block';
-                    }
-                    if (password !== 'asp2024') {
-                        document.getElementById('passwordError').style.display = 'block';
-                    }
-                    
-                    // Réinitialiser après 2 secondes
-                    setTimeout(() => {
-                        loginButton.style.background = 'linear-gradient(to right, #0c2461, #1e3799)';
-                        buttonText.textContent = 'Se connecter';
-                        buttonIcon.style.display = 'inline-block';
-                        loginLoader.style.display = 'none';
-                        loginButton.disabled = false;
-                    }, 2000);
-                }
-            }, 1500); // Simuler un délai réseau
-        });
-        
-        // Remplissage automatique pour la démo
-        window.addEventListener('load', function() {
-            // Créer les particules
-            createParticles();
-            
-            // Vérifier si "Se souvenir de moi" était coché
-            if (localStorage.getItem('rememberLogin') === 'true') {
-                document.getElementById('rememberCheckbox').classList.add('checked');
-            }
-            
-            // Pré-remplir pour la démo (à retirer en production)
-            document.getElementById('username').value = 'admin';
-            document.getElementById('password').value = 'asp2024';
-        });
-        
-        // Effet de focus sur les champs
-        document.querySelectorAll('.input-field').forEach(field => {
-            field.addEventListener('focus', function() {
-                this.parentElement.parentElement.classList.add('focused');
-            });
-            
-            field.addEventListener('blur', function() {
-                this.parentElement.parentElement.classList.remove('focused');
-            });
-        });
-    </script>
+
 </body>
 </html>
