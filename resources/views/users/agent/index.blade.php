@@ -5,9 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion des Écoles - ASP Stages</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
         @include('users.ecole.style')
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
 </head>
 <body>
    
@@ -52,8 +57,8 @@
 
         <!-- Tableau des écoles -->
        <div class="table-container">
-    <table id="schoolsTable">
-        <thead>
+<table id="schoolsTable" class="table table-hover w-100">
+            <thead>
             <tr>
                 <th width="35%">Matricule</th>
                 <th width="50%">Nom </th>
@@ -65,59 +70,32 @@
 
             </tr>
         </thead>
-        <tbody>
-            @foreach($stagiares as $stagiare)
-            <tr>
-                <!-- Ici il faut utiliser td, pas th -->
-                <td width="35%">
-                    <div class="school-name">
-                        <i class="fas fa-university" style="margin-right: 10px; color: var(--primary);"></i>
-                        {{$stagiare->matricule}}
-                    </div>
-                </td>
-                <td width="50%">
-                    <div class="school-address">
-                        <i class="fas fa-map-marker-alt" style="margin-right: 10px; color: var(--gray-500);"></i>
-                        {{$stagiare->name}}
-                    </div>
-                </td>
-
-                <td width="50%">
-                    <div class="school-address">
-                        <i class="fas fa-map-marker-alt" style="margin-right: 10px; color: var(--gray-500);"></i>
-                        {{$stagiare->prenom}}
-                    </div>
-                </td>
-                <td width="50%">
-                    <div class="school-address">
-                        <i class="fas fa-map-marker-alt" style="margin-right: 10px; color: var(--gray-500);"></i>
-                        {{$stagiare->grade}}
-                    </div>
-                </td>
-
-                <td width="50%">
-                    <div class="school-address">
-                        <i class="fas fa-map-marker-alt" style="margin-right: 10px; color: var(--gray-500);"></i>
-                    {{ $stagiare->services->nom_services }}
-                    </div>
-                </td>
-                
-                 <td width="15%">
-                    <div class="actions">
-                        
-                            
-                    <a class="btn-action btn-edit" title="Modifier" href="{{ route('users.editAgentStagiare', $stagiare->id) }}">
+       <tbody>
+    @foreach($stagiares as $stagiare)
+    <tr>
+        <td>
+            <div class="school-name">
+                <i class="fas fa-id-card" style="margin-right: 10px; color: var(--primary);"></i>
+                {{$stagiare->matricule}}
+            </div>
+        </td>
+        <td>{{$stagiare->name}}</td>
+        <td>{{$stagiare->prenom}}</td>
+        <td><span class="badge bg-light text-dark">{{$stagiare->grade}}</span></td>
+        <td>{{ $stagiare->services->nom_services }}</td>
+        <td>{{ $stagiare->tel }}</td> <td>
+            <div class="actions">
+                <a class="btn-action btn-edit" title="Modifier" href="{{ route('users.editAgentStagiare', $stagiare->id) }}">
                     <i class="fas fa-edit"></i>
                 </a>
-                                    
-                        <button class="btn-action btn-delete"  title="Supprimer">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
+                <button class="btn-action btn-delete" title="Supprimer" onclick="confirmDelete('{{ $stagiare->id }}')">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </td>
+    </tr>
+    @endforeach
+</tbody>
     </table>
 </div>
 
@@ -294,7 +272,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="deleteSchoolModalLabel">
-                        <i class="fas fa-exclamation-triangle"></i> Confirmation
+                        <i class="fas fa-exclamation-triangle"></i> Confirmation    
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -318,25 +296,7 @@
     </div>
 
     <script>
-        // Variables globales
-        let schools = [];
-        let currentPage = 1;
-        const itemsPerPage = 10;
-        let editingSchoolId = null;
-        let schoolToDeleteId = null;
-
-        // Éléments DOM
-        const schoolsTableBody = document.getElementById('schoolsTableBody');
-        const emptyState = document.getElementById('emptyState');
-        const pagination = document.getElementById('pagination');
-        const loadingRow = document.getElementById('loadingRow');
-        const notificationMessage = document.getElementById('notificationMessage');
-        const searchInput = document.getElementById('searchInput');
-        const schoolForm = document.getElementById('schoolForm');
-        const addSchoolModal = new bootstrap.Modal(document.getElementById('addSchoolModal'));
-        const deleteSchoolModal = new bootstrap.Modal(document.getElementById('deleteSchoolModal'));
-        const addSchoolModalLabel = document.getElementById('addSchoolModalLabel');
-        const schoolIdInput = document.getElementById('schoolId');
+       
 
         // Fonction pour afficher le modal d'ajout
         function showAddModal() {
@@ -350,8 +310,26 @@
 
     
 
-       
+       $(document).ready(function() {
+    // Initialisation de DataTable
+    var table = $('#schoolsTable').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/fr-FR.json"
+        },
+        "dom": 'rtip', // Cache la barre de recherche par défaut de DT pour utiliser la vôtre
+        "pageLength": 10,
+        "ordering": true,
+        "responsive": true
+    });
+
+    // Liaison de votre input de recherche personnalisé
+    $('#searchInput').on('keyup', function() {
+        table.search(this.value).draw();
+    });
+});
     </script>
+
+
 
 </body>
 </html>
