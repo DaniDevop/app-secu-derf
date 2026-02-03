@@ -11,7 +11,7 @@
                 <i class="fas fa-tachometer-alt"></i>
                 <span class="nav-text">Tableau de bord</span>
             </a>
-            <a href="#" class="nav-item">
+            <a href="{{route('users.agent.index')}}" class="nav-item">
                 <i class="fas fa-user-graduate"></i>
                 <span class="nav-text">Stagiaires</span>
             </a>

@@ -429,21 +429,7 @@
             cursor: not-allowed;
         }
 
-        /* Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            padding: 20px;
-        }
+      
 
         .modal-overlay.active {
             display: flex;
@@ -455,15 +441,7 @@
             to { opacity: 1; }
         }
 
-        .modal {
-            background: white;
-            border-radius: 20px;
-            width: 100%;
-            max-width: 500px;
-            overflow: hidden;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
-            animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+     
 
         @keyframes slideIn {
             from {
