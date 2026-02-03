@@ -16,4 +16,9 @@ class AgentStagiare extends Model
     // car c'est le nom de votre colonne dans agent_stagiares
     return $this->belongsTo(ServiceAgent::class, 'service_agent_id');
 }
+
+
+public function affectation(){
+    return $this->hasMany(AffectionAgent::class);
+}
 }
